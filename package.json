@@ -1,0 +1,33 @@
+{
+  "name": "jstp",
+  "version": "0.0.1",
+  "description": "JavaScript SQL Template Parser",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha -r ts-node/register test/*.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eicc27/jstp.git"
+  },
+  "keywords": [
+    "sql"
+  ],
+  "author": "eicc27",
+  "license": "LGPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/eicc27/jstp/issues"
+  },
+  "homepage": "https://github.com/eicc27/jstp#readme",
+  "devDependencies": {
+    "@types/chai": "^4.3.3",
+    "@types/mocha": "^10.0.0",
+    "chai": "^4.3.6",
+    "mocha": "^10.1.0",
+    "typescript": "^4.8.4"
+  },
+  "dependencies": {
+    "reflect-metadata": "^0.1.13",
+    "ts-node": "^10.9.1"
+  }
+}
