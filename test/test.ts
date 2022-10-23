@@ -1,7 +1,7 @@
 import "mocha";
 import * as chai from "chai";
 import { table, column, nn, uni, pri, ai, fri } from "../src/props";
-import { Table } from "../src/sql";
+import { sqlify, Table } from "../src/sql";
 import { ConditionChain } from "../src/condition";
 
 @table("Classroom")
@@ -17,6 +17,9 @@ export class Class {
 
     @fri("students", "stuno")
     private stuno: string;
+
+    @nn
+    private utime: Date;
 }
 
 describe('Class Annotations Test', () => {
@@ -35,82 +38,82 @@ describe('Class Annotations Test', () => {
 describe('[Single]Condition Chain tests', () => {
     it('a = b', () => {
         const query = ConditionChain.eq('a', 'b').end().toString();
-        chai.expect(query).to.eq('a = b;');
+        chai.expect(query).to.eq('a = b');
     });
 
     it('a != b', () => {
         const query = ConditionChain.neq('a', 'b').end().toString();
-        chai.expect(query).to.eq('a != b;');
+        chai.expect(query).to.eq('a != b');
     });
 
     it('a > b', () => {
         const query = ConditionChain.gt('a', 'b').end().toString();
-        chai.expect(query).to.eq('a > b;');
+        chai.expect(query).to.eq('a > b');
     });
 
     it('a >= b', () => {
         const query = ConditionChain.gte('a', 'b').end().toString();
-        chai.expect(query).to.eq('a >= b;');
+        chai.expect(query).to.eq('a >= b');
     });
 
     it('a < b', () => {
         const query = ConditionChain.lt('a', 'b').end().toString();
-        chai.expect(query).to.eq('a < b;');
+        chai.expect(query).to.eq('a < b');
     });
 
     it('a <= b', () => {
         const query = ConditionChain.lte('a', 'b').end().toString();
-        chai.expect(query).to.eq('a <= b;');
+        chai.expect(query).to.eq('a <= b');
     });
 
     it('a like b', () => {
         const query = ConditionChain.like('a', 'b').end().toString();
-        chai.expect(query).to.eq('a like b;');
+        chai.expect(query).to.eq('a like b');
     });
 
     it('a not like b', () => {
         const query = ConditionChain.nlike('a', 'b').end().toString();
-        chai.expect(query).to.eq('a not like b;');
+        chai.expect(query).to.eq('a not like b');
     });
 
     it('a glob b', () => {
         const query = ConditionChain.glob('a', 'b').end().toString();
-        chai.expect(query).to.eq('a glob b;');
+        chai.expect(query).to.eq('a glob b');
     });
 
     it('a not glob b', () => {
         const query = ConditionChain.nglob('a', 'b').end().toString();
-        chai.expect(query).to.eq('a not glob b;');
+        chai.expect(query).to.eq('a not glob b');
     });
 
     it('a in (b,c,d)', () => {
         const query = ConditionChain.in('a', ['b', 'c', 'd']).end().toString();
-        chai.expect(query).to.eq('a in (b,c,d);');
+        chai.expect(query).to.eq('a in (b,c,d)');
     });
 
     it('a not in (b,c,d)', () => {
         const query = ConditionChain.nin('a', ['b', 'c', 'd']).end().toString();
-        chai.expect(query).to.eq('a not in (b,c,d);');
+        chai.expect(query).to.eq('a not in (b,c,d)');
     });
 
     it('a between b and c', () => {
         const query = ConditionChain.between('a', 'b', 'c').end().toString();
-        chai.expect(query).to.eq('a between b and c;');
+        chai.expect(query).to.eq('a between b and c');
     });
 
     it('a not between b and c', () => {
         const query = ConditionChain.nbetween('a', 'b', 'c').end().toString();
-        chai.expect(query).to.eq('a not between b and c;');
+        chai.expect(query).to.eq('a not between b and c');
     });
 
     it('a is null', () => {
         const query = ConditionChain.isnull('a').end().toString();
-        chai.expect(query).to.eq('a is null;');
+        chai.expect(query).to.eq('a is null');
     });
 
     it('a is not null', () => {
         const query = ConditionChain.nnull('a').end().toString();
-        chai.expect(query).to.eq('a is not null;');
+        chai.expect(query).to.eq('a is not null');
     });
 });
 
@@ -127,7 +130,7 @@ describe('[compound]Condition Chain tests', () => {
         const expectation = 'a = b and a = c and a != b and a > b and a >= b '
             + 'and a < b and a <= b and a like b and a not like b and a glob b and a not glob b '
             + 'and a in (b,c,d) and a not in (b,c,d) and a between b and c and a not between b and c '
-            + 'and a is null and a is not null;';
+            + 'and a is null and a is not null';
         chai.expect(query).to.eq(expectation);
     });
 
@@ -143,7 +146,23 @@ describe('[compound]Condition Chain tests', () => {
         const expectation = 'a = b or a = c or a != b or a > b or a >= b '
             + 'or a < b or a <= b or a like b or a not like b or a glob b or a not glob b '
             + 'or a in (b,c,d) or a not in (b,c,d) or a between b and c or a not between b and c '
-            + 'or a is null or a is not null;';
+            + 'or a is null or a is not null';
         chai.expect(query).to.eq(expectation);
+    });
+});
+
+describe('[field test]Condition Chain in select', () => {
+    it('select classroom name like abc and stuno equals 111', () => {
+        const table = new Table(Class);
+        const query = ConditionChain.like('classroom_name', sqlify('abc')).eq('stuno', sqlify(111)).end();
+        const selection = table.selectAll(query.toString());
+        chai.expect(selection).to.eq("select * from `Classroom` where classroom_name like 'abc' and stuno = 111");
+    });
+
+    it('select utime glob 2022-1-1 or no between 1 and 2', () => {
+        const table = new Table(Class);
+        const query = ConditionChain.glob('utime', sqlify('2022-01-01')).or().between('no', sqlify(1), sqlify(2)).end();
+        const selection = table.selectAll(query.toString());
+        chai.expect(selection).to.eq("select * from `Classroom` where utime glob '2022-01-01' or no between 1 and 2");
     });
 });

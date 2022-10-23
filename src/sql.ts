@@ -1,8 +1,10 @@
-function sqlify(v: string | number) {
+export function sqlify(v: string | number | Date) {
     if (typeof v == 'string') {
         return `'${v}'`;
     } else if (typeof v == 'number') {
-        return v;
+        return v.toString();
+    } else {
+        // todo
     }
 }
 

@@ -239,7 +239,6 @@ class PrintableConditionChain {
             if (connective)
                 query += ` ${connective} `;
         });
-        query += ';';
         return query;
     }
 }
