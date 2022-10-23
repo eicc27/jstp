@@ -114,8 +114,8 @@ describe('[Single]Condition Chain tests', () => {
     });
 });
 
-describe('[compund]Condition Chain tests', () => {
-    it('and chain for all and conditions', () => {
+describe('[compound]Condition Chain tests', () => {
+    it('and chain for all conditions', () => {
         const query = ConditionChain.eq('a', 'b').eq('a', 'c').neq('a', 'b')
             .gt('a', 'b').gte('a', 'b')
             .lt('a', 'b').lte('a', 'b')
@@ -131,7 +131,7 @@ describe('[compund]Condition Chain tests', () => {
         chai.expect(query).to.eq(expectation);
     });
 
-    it('and chain for all or conditions', () => {
+    it('or chain for all conditions', () => {
         const query = ConditionChain.eq('a', 'b').or().eq('a', 'c').or().neq('a', 'b')
             .or().gt('a', 'b').or().gte('a', 'b')
             .or().lt('a', 'b').or().lte('a', 'b')
@@ -139,7 +139,7 @@ describe('[compund]Condition Chain tests', () => {
             .or().glob('a', 'b').or().nglob('a', 'b')
             .or().in('a', ['b', 'c', 'd']).or().nin('a', ['b', 'c', 'd'])
             .or().between('a', 'b', 'c').or().nbetween('a', 'b', 'c')
-            .or().isnull('a').or().nnull('a').or().end().or().toString();
+            .or().isnull('a').or().nnull('a').or().end().toString();
         const expectation = 'a = b or a = c or a != b or a > b or a >= b '
             + 'or a < b or a <= b or a like b or a not like b or a glob b or a not glob b '
             + 'or a in (b,c,d) or a not in (b,c,d) or a between b and c or a not between b and c '

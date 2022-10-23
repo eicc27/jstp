@@ -222,9 +222,10 @@ export class ConditionChain implements ComparisonCondition, LogicCondition {
     }
 }
 
-class PrintableConditionChain extends ConditionChain {
+class PrintableConditionChain {
+    private conditions: string[];
+    private connectives: string[];
     public constructor(conditions: string[], connectives: string[]) {
-        super();
         this.conditions = conditions;
         this.connectives = connectives;
         this.connectives.pop();
