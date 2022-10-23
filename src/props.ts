@@ -11,6 +11,9 @@ import "reflect-metadata";
  * It *does not* imply that every property(or member variable) is its column.
  * Due to some TS mechanisms, for each property desired as a column,
  * it should be **manually annotated** with column-related annotations. 
+ *
+ * Usage: `@table(...)` (with parentheses after the annotation)
+ *
  * @param alias The literal table name of the class. Leaving empty means the class name
  * is the table name(equivalent to not annotating this class with `@table()`).
  */
@@ -42,6 +45,9 @@ function setMetadataConfig(target: Object, key: string | symbol, config: any) {
  * this `@column(...)` must be
  * used instead of simply adding the annotation `@table(...)` on that
  * class. This is due to some TS reflection mechanisms.
+ *
+ * Usage: `@column(...)` (with parentheses after the annotation)
+ *
  * @param alias The literal column name of the property. Leaving empty means the property name
  * is the column name.
  */
@@ -125,11 +131,13 @@ export function ai(startFrom?: number, incrBy?: number): PropertyDecorator {
  *  - `cascade` means **synchronizing the changes** with these two tables.
  *  - `setNull` means **setting null** to the conflicting values of the foreign key
  * (not the key in the referred table).
+ *
+ * Usage: `@fri(...)` (with parentheses after the annotation)
+ *
  * @param refTable The table to be referred.
  * @param refColumn The column to be referred.
  * @param onDelete The operation of deletion when conflict occurs.
  * @param onUpdate The operation of update when conflict occurs.
- * @returns 
  */
 export function fri(refTable: string, refColumn: string,
     onDelete?: 'restrict' | 'cascade' | 'setNull',
