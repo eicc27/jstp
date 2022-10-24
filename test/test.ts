@@ -3,6 +3,8 @@ import * as chai from "chai";
 import { table, column, nn, uni, pri, ai, fri } from "../src/props";
 import { sqlify, Table } from "../src/sql";
 import { ConditionChain } from "../src/condition";
+import { SQLFunction } from "../src/function";
+import { SelectionPostfix } from "../src/postfix";
 
 @table("Classroom")
 export class Class {
@@ -164,5 +166,23 @@ describe('[field test]Condition Chain in select', () => {
         const query = ConditionChain.glob('utime', sqlify('2022-01-01')).or().between('no', sqlify(1), sqlify(2)).end();
         const selection = table.selectAll(query.toString());
         chai.expect(selection).to.eq("select * from `Classroom` where utime glob '2022-01-01' or no between 1 and 2");
+    });
+});
+
+describe('[prefixes, functions and postfixes]Advanced Selection', () =>  {
+    it('select the abs of the count of classroom where no in 4, 5, 6', () => {
+        const table = new Table(Class);
+        const where = ConditionChain.in('no', ['4', '5', '6']).end();
+        const prefix = SQLFunction.count('*').abs().end();
+        const selection = table.select(prefix, where);
+        chai.expect(selection).to.eq("select abs(count(*)) from `Classroom` where no in (4,5,6)");
+    });
+
+    it('select the classroom where no between 4, 6 and return the joint of the number, limitation is 1', () => {
+        const table = new Table(Class);
+        const where = ConditionChain.between('no', '4', '6').end();
+        const postfix = SelectionPostfix.groupBy(['no']).limit(1).end();
+        const selection = table.select(null, where, postfix);
+        chai.expect(selection).to.eq("select * from `Classroom` where no between 4 and 6 group by no limit 1");
     });
 });

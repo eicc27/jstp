@@ -1,115 +1,83 @@
-type noArgsExpr = () => SQLFunction;
-interface ISQLFunction {
-    count: noArgsExpr;
-    max: noArgsExpr;
-    min: noArgsExpr;
-    avg: noArgsExpr;
-    sum: noArgsExpr;
-    // random: noArgsExpr;
-    // distinct: noArgsExpr;
-    abs: noArgsExpr;
-    upper: noArgsExpr;
-    lower: noArgsExpr;
-    lengthOf: noArgsExpr;
-}
-
-export class SQLFunction implements ISQLFunction {
-    private output = '';
-
-    private constructor(output?: string) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SQLFunction = void 0;
+class SQLFunction {
+    output = '';
+    constructor(output) {
         this.output = output;
     }
-
-    public count() {
+    count() {
         this.output = `count(${this.output})`;
         return this;
     }
-
-    public static count(arg: string) {
+    static count(arg) {
         return new SQLFunction(`count(${arg})`);
     }
-
-    public max() {
+    max() {
         this.output = `max(${this.output})`;
         return this;
     }
-
-    public static max(arg: string) {
+    static max(arg) {
         return new SQLFunction(`max(${arg})`);
     }
-
-    public min() {
+    min() {
         this.output = `min(${this.output})`;
         return this;
     }
-
-    public static min(arg: string) {
+    static min(arg) {
         return new SQLFunction(`min(${arg})`);
     }
-
-    public avg() {
+    avg() {
         this.output = `avg(${this.output})`;
         return this;
     }
-
-    public static avg(arg: string) {
+    static avg(arg) {
         return new SQLFunction(`avg(${arg})`);
     }
-
-    public sum() {
+    sum() {
         this.output = `sum(${this.output})`;
         return this;
     }
-
-    public static sum(arg: string) {
+    static sum(arg) {
         return new SQLFunction(`sum(${arg})`);
     }
-
-    public static random() {
+    static random() {
         return new SQLFunction(`random()`);
     }
-
-    public abs() {
+    abs() {
         this.output = `abs(${this.output})`;
         return this;
     }
-
-    public static abs(arg: string) {
+    static abs(arg) {
         return new SQLFunction(`abs(${arg})`);
     }
-
-    public upper() {
+    upper() {
         this.output = `upper(${this.output})`;
         return this;
     }
-
-    public static upper(arg: string) {
+    static upper(arg) {
         return new SQLFunction(`upper(${arg})`);
     }
-
-    public lower() {
+    lower() {
         this.output = `lower(${this.output})`;
         return this;
     }
-
-    public static lower(arg: string) {
+    static lower(arg) {
         return new SQLFunction(`lower(${arg})`);
     }
-
-    public lengthOf() {
+    lengthOf() {
         this.output = `length(${this.output})`;
         return this;
     }
-
-    public static lengthOf(arg: string) {
+    static lengthOf(arg) {
         return new SQLFunction(`length(${arg})`);
     }
-
-    public static distinct(arg: string) {
+    static distinct(arg) {
         return new SQLFunction(`distinct ${arg}`);
     }
-
-    public end() {
+    end() {
         return this.output;
     }
 }
+exports.SQLFunction = SQLFunction;
+//# sourceMappingURL=function.js.map

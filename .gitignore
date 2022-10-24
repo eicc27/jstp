@@ -105,3 +105,6 @@ dist
 
 # temp files
 test/temp.txt
+
+#db files
+db/

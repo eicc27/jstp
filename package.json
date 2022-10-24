@@ -4,7 +4,9 @@
   "description": "JavaScript SQL Template Parser",
   "main": "index.js",
   "scripts": {
-    "test": "mocha -r ts-node/register test/*.ts"
+    "test": "mocha -r ts-node/register test/*.ts",
+    "build": "rimraf ./build && tsc",
+    "dev": "npm run build && node build/index.js"
   },
   "repository": {
     "type": "git",
@@ -20,6 +22,7 @@
   },
   "homepage": "https://github.com/eicc27/jstp#readme",
   "devDependencies": {
+    "@types/better-sqlite3": "^7.6.2",
     "@types/chai": "^4.3.3",
     "@types/mocha": "^10.0.0",
     "chai": "^4.3.6",
@@ -28,6 +31,10 @@
   },
   "dependencies": {
     "reflect-metadata": "^0.1.13",
+    "rimraf": "^3.0.2",
     "ts-node": "^10.9.1"
+  },
+  "optionalDependencies": {
+    "better-sqlite3": "^7.6.2"
   }
 }
